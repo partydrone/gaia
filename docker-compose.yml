@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  gaia:
+    build: .devcontainer
+    depends_on:
+      - postgres
+    stdin_open: true
+    volumes:
+      - ./src:/srv/gaia
+
+  postgres:
+    image: postgres:11-alpine
+    restart: always
+    volumes:
+      - ./tmp/data/postgres:/var/lib/postgresql/data
+
+  proxy:
+    command: --api --docker
+    image: traefik
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  redis:
+    image: redis:5-alpine
+    restart: always
+    volumes:
+      - ./tmp/data/redis:/data
