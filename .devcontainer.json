@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/master/containers/ruby-2
 {
 	"name": "Gaia",
-	"dockerComposeFile": "../docker-compose.yml",
+	"dockerComposeFile": "docker-compose.yml",
 	"service": "gaia",
 	"workspaceFolder": "/srv/gaia",
 	"shutdownAction": "stopCompose",

@@ -2,9 +2,15 @@ version: "3"
 
 services:
   gaia:
-    build: .devcontainer
+    build: .
     depends_on:
       - postgres
+      - proxy
+      - redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gaia.rule=Host(`math.localhost`)"
+      - "traefik.http.routers.gaia.entryPoints=web"
     stdin_open: true
     volumes:
       - ./src:/srv/gaia
@@ -16,12 +22,17 @@ services:
       - ./tmp/data/postgres:/var/lib/postgresql/data
 
   proxy:
-    command: --api --docker
-    image: traefik
+    command:
+      - "--api"
+      - "--providers.docker"
+      - "--providers.docker.exposedByDefault=false"
+      - "--entryPoints.web.address=:80"
+    image: traefik:2.0-alpine
     ports:
       - 80:80
       - 443:443
       - 8080:8080
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
