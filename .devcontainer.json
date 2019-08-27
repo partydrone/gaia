@@ -20,6 +20,7 @@
 	// "runArgs": [ "-u", "1000" ],
 
 	"extensions": [
-		"rebornix.Ruby"
+		"rebornix.Ruby",
+		"vortizhe.simple-ruby-erb"
 	]
 }

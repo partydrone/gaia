@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 
 services:
   gaia:
@@ -13,7 +13,9 @@ services:
       - "traefik.http.routers.gaia.entryPoints=web"
     stdin_open: true
     volumes:
-      - ./:/srv/gaia
+      - .:/srv/gaia
+      - type: tmpfs
+        target: /srv/gaia/tmp/pids/
 
   webpacker:
     command: ./bin/webpack-dev-server
@@ -22,10 +24,11 @@ services:
       - RAILS_ENV=development
       - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
     image: rails6-docker_gaia
-    ports:
-      - 3035:3035
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webpacker.entryPoints=webpacker"
     volumes:
-      - ./:/srv/gaia
+      - .:/srv/gaia
 
   postgres:
     image: postgres:11-alpine
@@ -39,10 +42,12 @@ services:
       - "--providers.docker"
       - "--providers.docker.exposedByDefault=false"
       - "--entryPoints.web.address=:80"
+      - "--entryPoints.webpacker.address=:3035"
     image: traefik:2.0-alpine
     ports:
       - 80:80
       - 443:443
+      - 3035:3035
       - 8080:8080
     restart: always
     volumes:

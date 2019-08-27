@@ -28,9 +28,18 @@ gem 'redis', '~> 4.0'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
+##
+# AUTHORIZATION AND AUTHENTICATION
+gem 'omniauth-auth0'
+gem 'omniauth-rails_csrf_protection'
+gem 'pundit'
+gem 'rolify'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'guard'
+  gem 'guard-minitest'
 end
 
 group :development do
