@@ -15,6 +15,18 @@ services:
     volumes:
       - ./:/srv/gaia
 
+  webpacker:
+    command: ./bin/webpack-dev-server
+    environment:
+      - NODE_ENV=development
+      - RAILS_ENV=development
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+    image: rails6-docker_gaia
+    ports:
+      - 3035:3035
+    volumes:
+      - ./:/srv/gaia
+
   postgres:
     image: postgres:11-alpine
     restart: always
