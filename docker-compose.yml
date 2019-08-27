@@ -13,7 +13,7 @@ services:
       - "traefik.http.routers.gaia.entryPoints=web"
     stdin_open: true
     volumes:
-      - ./src:/srv/gaia
+      - ./:/srv/gaia
 
   postgres:
     image: postgres:11-alpine

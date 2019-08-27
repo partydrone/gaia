@@ -1,0 +1,10 @@
+/log
+/node_modules
+/tmp
+.devcontainer.json
+.git*
+.ruby-version
+docker-compose.yml
+docker-compose.*.yml
+Dockerfile
+README.md
