@@ -27,6 +27,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.webpacker.entryPoints=webpacker"
+      - "traefik.http.routers.webpacker.rule=Host(`webpacker`)"
     volumes:
       - .:/srv/gaia
 
@@ -37,12 +38,6 @@ services:
       - ./tmp/data/postgres:/var/lib/postgresql/data
 
   proxy:
-    command:
-      - "--api"
-      - "--providers.docker"
-      - "--providers.docker.exposedByDefault=false"
-      - "--entryPoints.web.address=:80"
-      - "--entryPoints.webpacker.address=:3035"
     image: traefik:2.0-alpine
     ports:
       - 80:80
@@ -52,6 +47,7 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker/traefik.yml:/etc/traefik/traefik.yml
 
   redis:
     image: redis:5-alpine

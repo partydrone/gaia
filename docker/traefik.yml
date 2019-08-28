@@ -1,0 +1,14 @@
+api:
+  dashboard: true
+  debug: true
+
+entryPoints:
+  web:
+    address: :80
+
+  webpacker:
+    address: :3035
+
+providers:
+  docker:
+    exposedByDefault: false
