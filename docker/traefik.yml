@@ -1,10 +1,13 @@
 api:
   dashboard: true
-  debug: true
+  debug: false
 
 entryPoints:
-  web:
+  http:
     address: :80
+
+  https:
+    address: :443
 
   webpacker:
     address: :3035

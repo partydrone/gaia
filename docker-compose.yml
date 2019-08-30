@@ -9,8 +9,8 @@ services:
       - redis
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.gaia.rule=Host(`math.localhost`)"
-      - "traefik.http.routers.gaia.entryPoints=web"
+      - "traefik.http.routers.gaia.rule=Host(`gaia.localhost`)"
+      - "traefik.http.routers.gaia.entryPoints=http"
     stdin_open: true
     volumes:
       - .:/srv/gaia
@@ -27,7 +27,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.webpacker.entryPoints=webpacker"
-      - "traefik.http.routers.webpacker.rule=Host(`webpacker`)"
     volumes:
       - .:/srv/gaia
 
