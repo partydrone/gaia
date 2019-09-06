@@ -1,5 +1,6 @@
 # Note: You must restart bin/webpack-dev-server for changes to take effect
 
+---
 default: &default
   source_path: app/javascript
   source_entry_path: packs
@@ -52,7 +53,8 @@ development:
   <<: *default
   compile: true
 
-  # Verifies that correct packages and versions are installed by inspecting package.json, yarn.lock, and node_modules
+  # Verifies that correct packages and versions are installed by inspecting
+  # package.json, yarn.lock, and node_modules
   check_yarn_integrity: true
 
   # Reference: https://webpack.js.org/configuration/dev-server/
@@ -60,7 +62,7 @@ development:
     https: false
     host: webpacker
     port: 3035
-    public: webpacker:3035
+    public: gaia.localhost:3035
     hmr: false
     # Inline should be set to true if using HMR
     inline: true
@@ -85,7 +87,8 @@ test:
 production:
   <<: *default
 
-  # Production depends on precompilation of packs prior to booting for performance.
+  # Production depends on precompilation of packs prior to booting for
+  # performance.
   compile: false
 
   # Extract and emit a css file

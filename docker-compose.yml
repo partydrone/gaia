@@ -1,3 +1,4 @@
+---
 version: "3.7"
 
 services:
@@ -9,8 +10,12 @@ services:
       - redis
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.gaia.rule=Host(`gaia.localhost`)"
+      - "traefik.http.middlewares.gaia.headers.accessControlAllowMethods=GET,OPTIONS,PUT"
+      - "traefik.http.middlewares.gaia.headers.accessControlAllowOrigin=*"
+      - "traefik.http.middlewares.gaia.headers.accessControlMaxAge=100"
+      - "traefik.http.middlewares.gaia.headers.addVaryHeader=true"
       - "traefik.http.routers.gaia.entryPoints=http"
+      - "traefik.http.routers.gaia.rule=Host(`gaia.localhost`)"
     stdin_open: true
     volumes:
       - .:/srv/gaia
@@ -26,6 +31,10 @@ services:
     image: rails6-docker_gaia
     labels:
       - "traefik.enable=true"
+      - "traefik.http.middlewares.webpacker.headers.accessControlAllowMethods=GET,OPTIONS,PUT"
+      - "traefik.http.middlewares.webpacker.headers.accessControlAllowOrigin=*"
+      - "traefik.http.middlewares.webpacker.headers.accessControlMaxAge=100"
+      - "traefik.http.middlewares.webpacker.headers.addVaryHeader=true"
       - "traefik.http.routers.webpacker.entryPoints=webpacker"
     volumes:
       - .:/srv/gaia
