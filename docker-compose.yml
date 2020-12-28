@@ -1,24 +1,27 @@
 ---
-version: "3.7"
+version: '3.8'
 
 services:
-  gaia:
+  app:
     build: .
     depends_on:
       - postgres
       - proxy
       - redis
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/gaia?encoding=unicode&pool=5&timeout=5000
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.middlewares.gaia.headers.accessControlAllowMethods=GET,OPTIONS,PUT"
-      - "traefik.http.middlewares.gaia.headers.accessControlAllowOrigin=*"
-      - "traefik.http.middlewares.gaia.headers.accessControlMaxAge=100"
-      - "traefik.http.middlewares.gaia.headers.addVaryHeader=true"
-      - "traefik.http.routers.gaia.entryPoints=http"
-      - "traefik.http.routers.gaia.rule=Host(`gaia.localhost`)"
+      - 'traefik.enable=true'
+      - 'traefik.http.middlewares.app.headers.accessControlAllowMethods=GET,OPTIONS,PUT'
+      - 'traefik.http.middlewares.app.headers.accessControlAllowOrigin=*'
+      - 'traefik.http.middlewares.app.headers.accessControlMaxAge=100'
+      - 'traefik.http.middlewares.app.headers.addVaryHeader=true'
+      - 'traefik.http.routers.app.entryPoints=http'
+      - 'traefik.http.routers.app.rule=Host(`gaia.localhost`)'
     stdin_open: true
     volumes:
       - .:/srv/gaia
+      - /srv/gaia/node_modules
       - type: tmpfs
         target: /srv/gaia/tmp/pids/
 
@@ -28,25 +31,27 @@ services:
       - NODE_ENV=development
       - RAILS_ENV=development
       - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
-    image: rails6-docker_gaia
+    image: gaia_app
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.middlewares.webpacker.headers.accessControlAllowMethods=GET,OPTIONS,PUT"
-      - "traefik.http.middlewares.webpacker.headers.accessControlAllowOrigin=*"
-      - "traefik.http.middlewares.webpacker.headers.accessControlMaxAge=100"
-      - "traefik.http.middlewares.webpacker.headers.addVaryHeader=true"
-      - "traefik.http.routers.webpacker.entryPoints=webpacker"
+      - 'traefik.enable=true'
+      - 'traefik.http.middlewares.webpacker.headers.accessControlAllowMethods=GET,OPTIONS,PUT'
+      - 'traefik.http.middlewares.webpacker.headers.accessControlAllowOrigin=*'
+      - 'traefik.http.middlewares.webpacker.headers.accessControlMaxAge=100'
+      - 'traefik.http.middlewares.webpacker.headers.addVaryHeader=true'
+      - 'traefik.http.routers.webpacker.entryPoints=webpacker'
     volumes:
       - .:/srv/gaia
 
   postgres:
-    image: postgres:11-alpine
+    environment:
+      - POSTGRES_PASSWORD=password
+    image: postgres:alpine
     restart: always
     volumes:
       - ./tmp/data/postgres:/var/lib/postgresql/data
 
   proxy:
-    image: traefik:2.0-alpine
+    image: traefik:latest
     ports:
       - 80:80
       - 443:443
@@ -58,7 +63,7 @@ services:
       - ./docker/traefik.yml:/etc/traefik/traefik.yml
 
   redis:
-    image: redis:5-alpine
+    image: redis:alpine
     restart: always
     volumes:
       - ./tmp/data/redis:/data
